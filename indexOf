@@ -1,0 +1,13 @@
+ public static int indexOf(String[] a, String s)
+  {
+    int right = a.length-1;
+    int left = 0;
+    while (left <= right)  {
+    int middle = (left + right) / 2;
+    if ( s.equals(a[middle]))
+      return middle;
+    else if (s.compareTo(arr[middle]) < 0)
+      right = middle - 1;
+    else     
+      left = middle + 1;
+  }
