@@ -251,10 +251,12 @@ public class SortDisplay extends JButton implements ActionListener {
     Thread thread = new Thread() {
       public void run() {
         //finish current sort
+        int temp = mode;
+        
         mode = FAST;
         clicked = true;
         try {Thread.sleep(100);} catch(InterruptedException e) {}
-        mode = STEP;
+        mode = temp;
         
         createArray();
         
@@ -270,8 +272,6 @@ public class SortDisplay extends JButton implements ActionListener {
           Sort.quickSort(array);
         else
           throw new UnsupportedOperationException(action);
-        
-        update();
       }
     };
     thread.start();
@@ -292,12 +292,12 @@ public class SortDisplay extends JButton implements ActionListener {
       possible[i] = possible[index];
       possible[index] = temp;
     }
-
+    
     //fill actual array with first several value from shuffled array
     array = new double[(int)(Math.random() * 11) + 5];
     for (int i = 0; i < array.length; i++)
       array[i] = possible[i];
-   
+    
     pointers = new int[array.length];
     oldPointers = new int[array.length];
     objects = new double[array.length];
