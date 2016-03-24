@@ -98,6 +98,10 @@ public class Sort
   
   public static void insertionSort(double[] a)
   {
+    for (int i = 0; i < a.length; i++) {
+      insert(a, i);
+      SortDisplay.update();
+    }
   }
   
   public static void mergeSort(double[] a)
