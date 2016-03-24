@@ -90,10 +90,11 @@ public class Sort
   //postcondition: a[0] to a[nextIndex] are in increasing order
   public static void insert(double[] a, int nextIndex)
   {
-    double temp = a[nextIndex];
     int indexOfSmall = indexOfMin(a, nextIndex);
-    a[nextIndex] = a[indexOfSmall];
-    a[indexOfSmall] = temp;
+    double min = a[indexOfSmall];
+    for (int i = indexOfSmall; i > nextIndex; i--)
+      a[i] = a[i - 1];
+    a[nextIndex] = min;
   }
   
   public static void insertionSort(double[] a)
@@ -105,6 +106,10 @@ public class Sort
   }
   
   public static void mergeSort(double[] a)
+  {
+  }
+  
+  public static void quickSort(double[] a)
   {
   }
 }
