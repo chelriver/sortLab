@@ -115,12 +115,21 @@ public class Sort
     }
     return arr;
   }
-  /**
+  
   public static double[] merge(double[] left, double[] right)
   {
-    
+    double[] arr = new double[left.length + right.length];
+    for (int i = 0 ; i < left.length ; i++)
+      for (int j = 0; j< right.length; j++)
+      if (left[i] < right[j])
+        arr[i] = left[i]
+      else if (left[i] > right[j])
+        arr[i] = right[j]
+      else //the two elements are equal
+        
+      
   }
-  */
+  
   public static void mergeSort(double[] a)
   {
   }
