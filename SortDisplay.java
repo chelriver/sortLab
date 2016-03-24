@@ -4,8 +4,7 @@ import java.awt.geom.*;
 import java.util.*;
 import javax.swing.*;
 
-public class SortDisplay extends JButton implements ActionListener
-{
+public class SortDisplay extends JButton implements ActionListener {
   private static final int FAST = 0;
   private static final int SLOW = 1;
   private static final int STEP = 2;
@@ -19,8 +18,7 @@ public class SortDisplay extends JButton implements ActionListener
   private static int mode = SLOW;
   private static SortDisplay display;
   
-  public SortDisplay()
-  {
+  public SortDisplay() {
     display = this;
     
     array = new double[5];
@@ -28,8 +26,7 @@ public class SortDisplay extends JButton implements ActionListener
     oldObjects = new double[array.length];
     pointers = new int[array.length];
     oldPointers = new int[array.length];
-    for (int i = 0; i < array.length; i++)
-    {
+    for (int i = 0; i < array.length; i++) {
       pointers[i] = i;
       oldPointers[i] = i;
     }
@@ -87,16 +84,14 @@ public class SortDisplay extends JButton implements ActionListener
     frame.setVisible(true);
   }
   
-  protected void paintComponent(Graphics g)
-  {
+  protected void paintComponent(Graphics g) {
     Graphics2D g2 = (Graphics2D)g;
     g2.setColor(Color.WHITE);
     g2.fill(new Rectangle2D.Double(0, 0, getWidth(), getHeight()));
     g2.setColor(Color.BLACK);
     int unit = getWidth() / pointers.length;
     FontMetrics metrics = g2.getFontMetrics();
-    for (int i = 0; i < array.length; i++)
-    {
+    for (int i = 0; i < array.length; i++) {
       g2.setColor(Color.BLACK);
       g2.draw(new Rectangle2D.Double(i * unit, 0, unit, unit));
       if (pointers[i] == oldPointers[i])
@@ -115,11 +110,9 @@ public class SortDisplay extends JButton implements ActionListener
     }
   }
   
-  private static int indexOf(double x)
-  {
+  private static int indexOf(double x) {
     for (int i = 0; i < objects.length; i++)
-      if (objects[i] == x)
-      return i;
+      if (objects[i] == x) return i;
     return -1;
   }
   
@@ -149,10 +142,8 @@ public class SortDisplay extends JButton implements ActionListener
     
     //check if anything changed
     boolean changed = false;
-    for (int i = 0; i < array.length; i++)
-    {
-      if (array[i] != objects[pointers[i]])
-      {
+    for (int i = 0; i < array.length; i++) {
+      if (array[i] != objects[pointers[i]]) {
         changed = true;
         break;
       }
@@ -161,8 +152,7 @@ public class SortDisplay extends JButton implements ActionListener
       return;
     
     //save old positions
-    for (int i = 0; i < array.length; i++)
-    {
+    for (int i = 0; i < array.length; i++) {
       oldPointers[i] = pointers[i];
       oldObjects[i] = objects[i];
     }
@@ -174,8 +164,7 @@ public class SortDisplay extends JButton implements ActionListener
     redraw();
     
     //save old positions
-    for (int i = 0; i < array.length; i++)
-    {
+    for (int i = 0; i < array.length; i++) {
       oldPointers[i] = pointers[i];
       oldObjects[i] = objects[i];
     }
@@ -183,8 +172,7 @@ public class SortDisplay extends JButton implements ActionListener
     //find ways to reduce arrow length by swapping objects.
     changed = false;
     for (int i = 0; i < array.length; i++)
-      for (int j = i + 1; j < array.length; j++)
-    {
+      for (int j = i + 1; j < array.length; j++) {
       int iIndex = pointers[i];
       int jIndex = pointers[j];
       
@@ -193,8 +181,7 @@ public class SortDisplay extends JButton implements ActionListener
       for (int k = 0; k < array.length; k++)
         oldLength += Math.abs(k - pointers[k]);
       int newLength = 0;
-      for (int k = 0; k < array.length; k++)
-      {
+      for (int k = 0; k < array.length; k++) {
         int target = pointers[k];
         if (target == iIndex)
           target = jIndex;
@@ -203,13 +190,11 @@ public class SortDisplay extends JButton implements ActionListener
         newLength += Math.abs(k - target);
       }
       
-      if (newLength < oldLength)
-      {
+      if (newLength < oldLength) {
         changed = true;
         
         //should change ANY pointer that points to either of these two objects
-        for (int k = 0; k < array.length; k++)
-        {
+        for (int k = 0; k < array.length; k++) {
           if (pointers[k] == iIndex)
             pointers[k] = jIndex;
           else if (pointers[k] == jIndex)
@@ -237,8 +222,7 @@ public class SortDisplay extends JButton implements ActionListener
     
     if (mode == SLOW)
       try { Thread.sleep(500); } catch(InterruptedException e) {}
-    else //(mode == STEPPING)
-    {
+    else { //(mode == STEPPING)
       clicked = false;
       while (!clicked)
         try { Thread.sleep(100); } catch(InterruptedException e) {}
@@ -253,10 +237,9 @@ public class SortDisplay extends JButton implements ActionListener
       clicked = true;
       return;
     }
-    if (action.equals("mode"))
-    {
-      JComboBox box =(JComboBox) e.getSource();
-      String item = (String)box.getSelectedItem();
+    if (action.equals("mode")) {
+      JComboBox box = (JComboBox) e.getSource();
+      String item = (String) box.getSelectedItem();
       if (item.equals("Step"))
         mode = STEP;
       else if (item.equals("Run"))
@@ -265,10 +248,8 @@ public class SortDisplay extends JButton implements ActionListener
       return;
     }
     
-    Thread thread = new Thread()
-    {
-      public void run()
-      {
+    Thread thread = new Thread() {
+      public void run() {
         //finish current sort
         mode = FAST;
         clicked = true;
@@ -285,8 +266,12 @@ public class SortDisplay extends JButton implements ActionListener
           Sort.insertionSort(array);
         else if (action.equals("merge"))
           Sort.mergeSort(array);
+        else if (action.equals("quick"))
+          Sort.quickSort(array);
         else
           throw new UnsupportedOperationException(action);
+        
+        update();
       }
     };
     thread.start();
@@ -300,8 +285,7 @@ public class SortDisplay extends JButton implements ActionListener
       possible[i] = i / 10.0;
     
     //randomly shuffle possible values
-    for (int i = possible.length - 1; i >= 0; i--)
-    {
+    for (int i = possible.length - 1; i >= 0; i--) {
       //choose random value from 0 to i to put in position i
       int index = (int)(Math.random() * (i + 1));
       double temp = possible[i];
@@ -318,8 +302,7 @@ public class SortDisplay extends JButton implements ActionListener
     oldPointers = new int[array.length];
     objects = new double[array.length];
     oldObjects = new double[array.length];
-    for (int i = 0; i < array.length; i++)
-    {
+    for (int i = 0; i < array.length; i++) {
       pointers[i] = i;
       oldPointers[i] = i;
       objects[i] = array[i];
@@ -328,13 +311,11 @@ public class SortDisplay extends JButton implements ActionListener
     redraw();
   }
   
-  public static void main(String[] args)
-  {
+  public static void main(String[] args) {
     run();
   }
   
-  public static void run()
-  {
+  public static void run() {
     new SortDisplay();
   }
 }

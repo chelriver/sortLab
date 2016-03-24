@@ -1,12 +1,10 @@
 import java.util.*;
 
-public class Sort
-{
+public class Sort {
   //precondition:  a is arranged in alphabetical order
   //postcondition: uses binary search to return the index of string s in a;
   //               returns -1 if not found 
-  public static int indexOf(String[] a, String s)
-  {
+  public static int indexOf(String[] a, String s) {
     int right = a.length-1;
     int left = 0;
     while (left <= right)  {
@@ -22,8 +20,7 @@ public class Sort
   }
   
   //call this method to test your indexOf code
-  public static void testIndexOf()
-  {
+  public static void testIndexOf() {
     String[] words = {
       "case", "child", "day", "eye", "government",
       "hand", "life", "man", "part", "person",
@@ -38,8 +35,7 @@ public class Sort
     for (int i = 0; i < a.length; i++)
       a[i] = list.get(i);
     System.out.println("a:  " + list);
-    for (int i = 0; i < words.length; i++)
-    {
+    for (int i = 0; i < words.length; i++) {
       System.out.print("Searching for:  " + words[i]);
       int index = indexOf(a, words[i]);
       System.out.println("\t\tindexOf returned:  " + index);
@@ -62,8 +58,7 @@ public class Sort
   //precondition:  0 <= startIndex < a.length
   //postcondition: Returns the index of the minimum value from
   //               a[startIndex] to end of array
-  public static int indexOfMin(double[] a, int startIndex)
-  {
+  public static int indexOfMin(double[] a, int startIndex) {
     double small = a[startIndex];
     int j = startIndex;
     for (int i = startIndex; i < a.length; i++) {
@@ -75,8 +70,7 @@ public class Sort
     return j;
   }
   
-  public static void selectionSort(double[] a)
-  {
+  public static void selectionSort(double[] a) {
     for (int i = 0; i < a.length; i++) {
       double temp = a[i];
       int indexOfSmall = indexOfMin(a, i);
@@ -88,8 +82,7 @@ public class Sort
   
   //precondition:  a[0] to a[nextIndex - 1] are in increasing order
   //postcondition: a[0] to a[nextIndex] are in increasing order
-  public static void insert(double[] a, int nextIndex)
-  {
+  public static void insert(double[] a, int nextIndex) {
     int indexOfSmall = indexOfMin(a, nextIndex);
     double min = a[indexOfSmall];
     for (int i = indexOfSmall; i > nextIndex; i--)
@@ -97,16 +90,14 @@ public class Sort
     a[nextIndex] = min;
   }
   
-  public static void insertionSort(double[] a)
-  {
+  public static void insertionSort(double[] a) {
     for (int i = 0; i < a.length; i++) {
       insert(a, i);
       SortDisplay.update();
     }
   }
   
-  public static double[] subArray(double[] a, int lowIndex, int highIndex)
-  {
+  public static double[] subArray(double[] a, int lowIndex, int highIndex) {
     double[] arr = new double[highIndex - lowIndex + 1];
     for (int i = 0; i < arr.length; i++) {
       for (int j = lowIndex; j <= highIndex; j++) {
@@ -116,25 +107,70 @@ public class Sort
     return arr;
   }
   
-  public static double[] merge(double[] left, double[] right)
-  {
-    double[] arr = new double[left.length + right.length];
-    for (int i = 0 ; i < left.length; i++) {
-      for (int j = 0; j < right.length; j++) {
-        if (left[i] < right[j])
-          arr[i] = left[i];
-        else if (left[i] > right[j])
-          arr[i] = right[j];
-      }
+  public static void mergeSort(double[] a) {
+    double[] tmp = new double[a.length];
+    mergeSort(a, tmp,  0,  a.length - 1);
+  }
+  
+  private static void mergeSort(double[] a, double[] tmp, int left, int right) {
+    if (left < right) {
+      int center = (left + right) / 2;
+      mergeSort(a, tmp, left, center);
+      mergeSort(a, tmp, center + 1, right);
+      merge(a, tmp, left, center + 1, right);
     }
-    return arr;
   }
   
-  public static void mergeSort(double[] a)
-  {
+  private static void merge(double[] a, double[] tmp, int left, int right, int rightEnd) {
+    int leftEnd = right - 1;
+    int k = left;
+    int num = rightEnd - left + 1;
+    
+    while (left <= leftEnd && right <= rightEnd)
+      if (a[left] <= (a[right]))
+      tmp[k++] = a[left++];
+    else
+      tmp[k++] = a[right++];
+    
+    while (left <= leftEnd)    // Copy rest of first half
+      tmp[k++] = a[left++];
+    
+    while(right <= rightEnd)  // Copy rest of right half
+      tmp[k++] = a[right++];
+    
+    // Copy tmp back
+    for (int i = 0; i < num; i++, rightEnd--)
+      a[rightEnd] = tmp[rightEnd];
+    
+    SortDisplay.update();
   }
   
-  public static void quickSort(double[] a)
-  {
+  public static void quickSort(double[] a) {
+    sort(a, 0, a.length-1);
+  }
+  
+  private static void sort(double[] a, int start, int end) {
+    int i = start;                          
+    int k = end;                            
+    if (end - start >= 1) {
+      double pivot = a[start];      
+      while (k > i) {
+        while (a[i] <= pivot && i <= end && k > i)
+          i++;                                
+        while (a[k] > pivot && k >= start && k >= i) 
+          k--;                                       
+        if (k > i)   {
+          double temp = a[i];          
+          a[i] = a[k];      
+          a[k] = temp;  
+        }
+        SortDisplay.update();
+      }
+      double temp = a[start];
+      a[start] = a[k];      
+      a[k] = temp;   
+      sort(a, start, k - 1); 
+      sort(a, k + 1, end);   
+    }              
   }
 }
