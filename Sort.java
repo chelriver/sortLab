@@ -105,6 +105,22 @@ public class Sort
     }
   }
   
+  public static double[] subArray(double[] a, int lowIndex, int highIndex)
+  {
+    double[] arr = new double[highIndex - lowIndex + 1];
+    for (int i = 0; i < arr.length; i++) {
+      for (int j = lowIndex; j <= highIndex; j++) {
+        arr[i] = a[j];
+      }
+    }
+    return arr;
+  }
+  /**
+  public static double[] merge(double[] left, double[] right)
+  {
+    
+  }
+  */
   public static void mergeSort(double[] a)
   {
   }
